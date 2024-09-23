@@ -8,7 +8,6 @@
 #define INC_DEF_VARIABLE_H_
 #include "main.h"
 
-#define APP_NODE_NAME				"B-G431B-ESC"
 #define APP_DESCRIPTOR_SIG			"g431cbu"
 /*	The string must be less than 8-bytes	*/
 static_assert( sizeof(APP_DESCRIPTOR_SIG) <= 8, "Error length" );
@@ -40,8 +39,6 @@ typedef struct __attribute__((packed)) IAP_DATA
   uint16_t	crc16;  // where use complement
 } IAP_DATA_t;
 
-extern CRC_HandleTypeDef			hcrc;
-extern UART_HandleTypeDef 			huart2;
 extern volatile IAP_DATA_t			iap_data __attribute__((section(".noinit")));
 
 #endif /* INC_DEF_VARIABLE_H_ */

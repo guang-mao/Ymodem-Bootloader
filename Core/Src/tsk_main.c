@@ -65,8 +65,8 @@ void API_JumpApplication(void)
 {
 	const __IO uint32_t *app_base = (const uint32_t *) ( APPLICATION_ADDRESS );
 	// The value in app_base[0] must be smaller than the internal ram size.
-	// stm32g431cb ram = 32k = 0x8000
-	if ( ( ( app_base[0] & 0x2FFF8000 ) == 0x20000000 ) && check_firmware() )
+	// STM32G431CB RAM = 32k = 0x8000, [Note] The top of the stack in STM32CubeIDE/Keil C is different...
+	if ( ( ( app_base[0] & 0x2FFF0000 ) == 0x20000000 ) && check_firmware() )
 	{
 	  /*
        * We hold back the programming of the lead words until the upload

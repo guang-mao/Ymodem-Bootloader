@@ -79,7 +79,8 @@ void MX_USART2_UART_Init(void);
 /* Private defines -----------------------------------------------------------*/
 
 /* USER CODE BEGIN Private defines */
-
+extern CRC_HandleTypeDef			hcrc;
+extern UART_HandleTypeDef 			huart2;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
