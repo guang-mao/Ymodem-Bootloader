@@ -50,6 +50,7 @@ extern "C" {
 #include "app_comms.h"
 #include "tsk_main.h"
 #include "menu.h"
+#include "version.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

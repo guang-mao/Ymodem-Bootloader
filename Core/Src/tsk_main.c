@@ -6,9 +6,27 @@
  */
 #include "tsk_main.h"
 
+#if !defined(DEBUG)
+void Disable_SWD_GPIO(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_14;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  return;
+}
+#endif
+
 void tsk_main(void *argument)
 {
   bool try_boot = false;
+
+#if !defined(DEBUG)
+  Disable_SWD_GPIO();
+#endif
 
   uint16_t crc16 = (uint16_t) ~(iap_data.EntryIAP);
   if ( iap_data.EntryIAP == IAP_ENTRY_CODE && crc16 == IAP_NOT_ENTRY_CODE )
@@ -106,6 +124,7 @@ void API_JumpApplication(void)
 	  /* Disable clock cycle counter */
 	  DWT->CTRL &= ~DWT_CTRL_CYCCNTENA_Msk;
 
+	  /* Peripheral Disable... */
 	  HAL_UART_MspDeInit(&huart2);
 	  HAL_RCC_DeInit();
 	  HAL_DeInit();

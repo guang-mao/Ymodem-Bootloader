@@ -36,8 +36,7 @@ void SerialDownload(void)
   uint32_t size = 0;
   COM_StatusTypeDef result;
 
-//  Serial_PutString((uint8_t *)"Waiting for the file to be sent ... (press 'a' to abort)\n\r");
-  Serial_PutString((uint8_t *)"Waiting for the file to be sent ...\n\r");
+  Serial_PutString((uint8_t *)"Waiting for the file to be sent ... (press 'a' to abort)\n\r");
   result = Ymodem_Receive( &size );
   if ( result == COM_OK )
   {
@@ -51,18 +50,22 @@ void SerialDownload(void)
     // Jump To Applicaion...
     API_JumpApplication();
   }
-  else if (result == COM_LIMIT)
+  else if ( result == COM_LIMIT )
   {
     Serial_PutString((uint8_t *)"\n\n\rThe image size is higher than the allowed space memory!\n\r");
   }
-  else if (result == COM_DATA)
+  else if ( result == COM_DATA )
   {
     Serial_PutString((uint8_t *)"\n\n\rVerification failed!\n\r");
   }
-  else if (result == COM_ABORT)
+  else if ( result == COM_ABORT )
   {
-    ;
-//    Serial_PutString((uint8_t *)"\r\n\nAborted by user.\n\r");
+    Serial_PutString((uint8_t *)"\r\n\nAborted by user.\n\r");
+    Serial_PutString((uint8_t *)"Try jumping to the applicaiton...\n\r");
+    HAL_Delay(700);
+    // Jump To Applicaion...
+    API_JumpApplication();
+    Serial_PutString((uint8_t *)"\r\n\nJump failed!!!...\n\r");
   }
   else
   {
@@ -77,10 +80,30 @@ void SerialDownload(void)
   */
 void Main_Menu(void)
 {
+  char *major = NULL, *minor = NULL, *commit_cnt = NULL, *git_hash = NULL;
+  char git_version[] = GIT_VERSION;
+  uint8_t version[80] = {0x00};
+
+  major = strtok(git_version, "-");
+
+  minor = strtok(NULL, "-");
+
+  commit_cnt = strtok(NULL, "-");
+
+  git_hash = strtok(NULL, "-g");
+
+  if ( major == NULL || minor == NULL || commit_cnt == NULL || git_hash == NULL )
+  {
+	sprintf( (char *) version, "\r\n= ST In-Application Programming Application  ( Version 1.0.00000000 ) =");
+  }
+  else
+  {
+    sprintf( (char *) version, "\r\n= ST In-Application Programming Application  ( Version %s.%s.%s ) =", major, minor, git_hash);
+  }
   Serial_PutString((uint8_t *)"\r\n======================================================================");
   Serial_PutString((uint8_t *)"\r\n=              (C) COPYRIGHT 2023 STMicroelectronics                 =");
   Serial_PutString((uint8_t *)"\r\n=                                                                    =");
-  Serial_PutString((uint8_t *)"\r\n=  STM32G4xx In-Application Programming Application  (Version 1.0.0) =");
+  Serial_PutString((uint8_t *) version);
   Serial_PutString((uint8_t *)"\r\n=                                                                    =");
   Serial_PutString((uint8_t *)"\r\n=                                            By STM Application Team =");
   Serial_PutString((uint8_t *)"\r\n=                                                                    =");

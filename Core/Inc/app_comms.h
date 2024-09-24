@@ -10,13 +10,11 @@
 
 #define HAL_RAM0_START							0x20000000
 
-#define APP_DESCRIPTOR_ADDR						0x0801FFF4
-
 #define APP_DESCRIPTOR_SIZE						0x0000000c
 
-#define APP_BOOTLOADER_COMMS_MAGIC				0xc544ad9a
+#define APP_DESCRIPTOR_ADDR						( FLASH_END_ADDRESS - APP_DESCRIPTOR_SIZE )
 
-#define APP_DESCRIPTOR_TOTAL_LENGTH 			12
+#define APP_BOOTLOADER_COMMS_MAGIC				0xc544ad9a
 
 struct app_bootloader_comms
 {
@@ -38,6 +36,6 @@ typedef struct __attribute__((packed))
 	uint8_t		sig[8];
 	uint32_t	image_size;
 } app_descriptor;
-static_assert(sizeof(app_descriptor) == APP_DESCRIPTOR_TOTAL_LENGTH, "app_descriptor incorrect length");
+static_assert(sizeof(app_descriptor) == APP_DESCRIPTOR_SIZE, "app_descriptor incorrect length");
 
 #endif /* INC_APP_COMMS_H_ */
